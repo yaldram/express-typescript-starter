@@ -1,0 +1,19 @@
+{
+  "name": "express-ts-starter",
+  "version": "1.0.0",
+  "description": "A starter project with express and typescript.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yaldram/express-typescript-starter.git"
+  },
+  "author": "Arsalan Yaldram",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yaldram/express-typescript-starter/issues"
+  },
+  "homepage": "https://github.com/yaldram/express-typescript-starter#readme"
+}
