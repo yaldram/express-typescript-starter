@@ -1,9 +1,10 @@
+import 'dotenv/config';
 import * as http from 'http';
 
 import expressServer from './server';
 
 class Main {
-  private readonly port = 8080;
+  private readonly port = process.env.SERVER_PORT || 8080;
   private server: http.Server;
 
   constructor() {

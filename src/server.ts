@@ -1,5 +1,8 @@
 import express from 'express';
 
+// Import our endpoint routers
+import { todosRouter } from './api/todos/todos.router';
+
 export class HttpServer {
   public app: express.Application;
 
@@ -19,13 +22,7 @@ export class HttpServer {
 
   // configure routes for express
   private addRoutes() {
-    this.app.get('/', (req, res) => {
-      return res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: 'Success',
-      });
-    });
+    this.app.use('/api/todos', todosRouter);
   }
 }
 
