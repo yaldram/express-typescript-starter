@@ -9,6 +9,7 @@ class TodosRouter extends BaseRouter {
 
   addRoutes(): void {
     this.router.get('/', todosController.getAllTodos);
+    this.router.post('/', todosController.createTodo);
     this.router.get('/:id', todosController.getTodoById);
   }
 

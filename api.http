@@ -1,0 +1,13 @@
+GET http://localhost:8080/api/todos
+
+###
+GET http://localhost:8080/api/todos/:todoId
+
+###
+POST http://localhost:8080/api/todos 
+Content-Type: application/json
+
+{
+  "text": "Walk for 30 minutes",
+  "status": "pending"
+}
