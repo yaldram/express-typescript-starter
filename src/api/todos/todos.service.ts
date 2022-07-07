@@ -2,7 +2,7 @@ import { BaseService } from '../../utils/BaseService';
 
 import { Todos, TodoStatus } from './todos.entity';
 
-class TodosService extends BaseService<Todos> {
+export class TodosService extends BaseService<Todos> {
   constructor() {
     super(Todos);
   }
