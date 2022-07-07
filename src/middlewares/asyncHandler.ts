@@ -1,7 +1,12 @@
-export function asyncHandler(fun: any) {
-  return function asyncMiddleware(...args: any) {
-    const funReturn = fun(...args);
-    const next = args[args.length - 1];
-    return Promise.resolve(funReturn).catch(next);
+import { Request, Response, NextFunction } from 'express';
+
+export function asyncHandler(controllerFunction: any) {
+  return function asyncMiddleware(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const controllerPromise = controllerFunction(req, res, next);
+    return Promise.resolve(controllerPromise).catch(next);
   };
 }

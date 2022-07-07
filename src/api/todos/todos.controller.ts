@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 
+import {
+  TypedRequestBody,
+  TypedRequestParams,
+} from '../../middlewares/validate';
 import { todosService } from './todos.service';
+import { todosSchema, todoGetSchema } from './todos.validation';
 
 class TodoController {
   async getAllTodos(req: Request, res: Response) {
@@ -13,7 +18,10 @@ class TodoController {
     });
   }
 
-  async getTodoById(req: Request, res: Response) {
+  async getTodoById(
+    req: TypedRequestParams<typeof todoGetSchema>,
+    res: Response
+  ) {
     const { todoId } = req.params;
     const todo = await todosService.getTodoById(todoId);
     if (!todo) {
@@ -31,7 +39,7 @@ class TodoController {
     });
   }
 
-  async createTodo(req: Request, res: Response) {
+  async createTodo(req: TypedRequestBody<typeof todosSchema>, res: Response) {
     const { text, status } = req.body;
     const newTodo = await todosService.createTodo(text, status);
 

@@ -2,7 +2,10 @@ import express, { Request, Response, NextFunction } from 'express';
 
 // Import our endpoint routers
 import { todosRouter } from './api/todos/todos.router';
+
+// Import our Error classes
 import { NotFoundError } from './utils/NotFoundError';
+import { ValidationError } from './utils/ValidationError';
 
 export class HttpServer {
   public app: express.Application;
@@ -42,13 +45,25 @@ export class HttpServer {
 
   private globalErrorHandler() {
     this.app.use(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (error: Error, req: Request, res: Response, next: NextFunction) => {
         console.log('Error (Global Error Handler)', error.stack);
+        // Handle 404 not found routes
         if (error instanceof NotFoundError) {
           return res.status(error.status).json({
             status: false,
             statusCode: error.status,
             message: error.message,
+          });
+        }
+
+        // Handle zod request body, params validation
+        if (error instanceof ValidationError) {
+          return res.status(error.status).json({
+            status: false,
+            statusCode: error.status,
+            message: error.message,
+            errors: error.validationErrors,
           });
         }
 
