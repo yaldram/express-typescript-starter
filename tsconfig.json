@@ -9,7 +9,15 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "outDir": "build",
-    "rootDir": "./"
+    "rootDir": "./",
+    "baseUrl": "./src",
+    "moduleResolution": "node",
+    "paths": {
+      "@api/*": ["api/*"],
+      "@utils/*": ["utils/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@config/*": ["config/*"]
+    }
   },
   "exclude": ["build", "tests"]
 }

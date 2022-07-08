@@ -1,4 +1,4 @@
-import { BaseService } from '../../utils/BaseService';
+import { BaseService } from '@utils/BaseService';
 
 import { Todos, TodoStatus } from './todos.entity';
 

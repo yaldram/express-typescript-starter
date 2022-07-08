@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
 
-import {
-  TypedRequestBody,
-  TypedRequestParams,
-} from '../../middlewares/validate';
+import { TypedRequestBody, TypedRequestParams } from '@middlewares/validate';
 import { todosService } from './todos.service';
 import { todosSchema, todoGetSchema } from './todos.validation';
 

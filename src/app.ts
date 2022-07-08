@@ -1,9 +1,12 @@
 import 'dotenv/config';
 import 'reflect-metadata';
+import './path';
 import * as http from 'http';
 
 import expressServer from './server';
 import { AppDataSource } from './datasource';
+import { logger } from '@utils/logger';
+
 class Main {
   private readonly port = process.env.SERVER_PORT || 8080;
   private server: http.Server;
@@ -17,22 +20,22 @@ class Main {
   private handleServerShutDown() {
     // Ctrl + C
     process.on('SIGINT', () => {
-      console.log('SIGINT RECEIVED, SHUTTING DOWN');
+      logger.info('SIGINT RECEIVED, SHUTTING DOWN');
       this.stopServer();
     });
 
     // kill command
     process.on('SIGTERM', () => {
-      console.log('SIGTERM RECEIVED, SHUTTING DOWN');
+      logger.info('SIGTERM RECEIVED, SHUTTING DOWN');
       this.stopServer();
     });
   }
 
   private stopServer() {
     this.server.close(() => {
-      console.log('EXPRESS SERVER IS CLOSED');
+      logger.info('EXPRESS SERVER IS CLOSED');
       AppDataSource.destroy().then(() => {
-        console.log('DATABASE DISCONNECTED');
+        logger.info('DATABASE DISCONNECTED');
         process.exit(0);
       });
     });
@@ -40,12 +43,12 @@ class Main {
 
   private startServer() {
     this.server.listen(this.port, async () => {
-      console.log('Server started on port', this.port);
+      logger.info(`Server started on port ${this.port}`);
       try {
         await AppDataSource.initialize();
-        console.log('Database Connected');
+        logger.info('Database Connected');
       } catch (error) {
-        console.log('Error connecting to Database', error);
+        logger.fatal(`Error connecting to Database - ${error}`);
       }
     });
   }

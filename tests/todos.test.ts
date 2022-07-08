@@ -33,19 +33,19 @@ describe('test todos endpoint with db connection', () => {
   });
 });
 
-const getAllTodoByIdMock = jest
+const getTodoByIdMock = jest
   .spyOn(TodosService.prototype, 'getTodoById')
   .mockImplementation(async () => {
     return {} as Todos;
   });
 
-describe.only('test todos endpoint with mocks', () => {
+describe('test todos endpoint with mocks', () => {
   it('should fetch todo successfully', async () => {
     const response = await supertest(expressApp).get(
       '/api/todos/0d853566-fe0d-11ec-92c2-0214694f2400'
     );
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('todo');
-    expect(getAllTodoByIdMock).toHaveBeenCalled();
+    expect(getTodoByIdMock).toHaveBeenCalled();
   });
 });

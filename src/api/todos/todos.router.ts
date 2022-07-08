@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
-import { asyncHandler } from '../../middlewares/asyncHandler';
-import { BaseRouter } from '../../utils/BaseRouter';
+import { asyncHandler } from '@middlewares/asyncHandler';
+import { BaseRouter } from '@utils/BaseRouter';
 import { todosController } from './todos.controller';
 import { todosSchema, todoGetSchema } from './todos.validation';
 import {
   validateRequestBody,
   validateRequestParams,
-} from '../../middlewares/validate';
+} from '@middlewares/validate';
 
 class TodosRouter extends BaseRouter {
   constructor() {

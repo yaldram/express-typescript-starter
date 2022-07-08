@@ -1,11 +1,17 @@
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import hpp from 'hpp';
+import expressRateLimit from 'express-rate-limit';
+import expressPinoLogger from 'express-pino-logger';
 
 // Import our endpoint routers
-import { todosRouter } from './api/todos/todos.router';
+import { todosRouter } from '@api/todos/todos.router';
 
 // Import our Error classes
-import { NotFoundError } from './utils/NotFoundError';
-import { ValidationError } from './utils/ValidationError';
+import { NotFoundError } from '@utils/NotFoundError';
+import { ValidationError } from '@utils/ValidationError';
+import { logger } from '@utils/logger';
 
 export class HttpServer {
   public app: express.Application;
@@ -29,10 +35,35 @@ export class HttpServer {
     this.app.use(express.json());
     // for parsing application/x-www-form-urlencoded
     this.app.use(express.urlencoded({ extended: true }));
+    // add cors
+    this.app.use(cors());
+    // add security to the server using helmet middleware
+    this.app.use(helmet());
+    // protect against HTTP Parameter Pollution attacks
+    this.app.use(hpp());
+    // add rate limit to the whole server
+    this.app.use(
+      expressRateLimit({
+        windowMs: 15 * 60 * 1000,
+        max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+      })
+    );
+    this.app.set('trust proxy', 1);
+    // add logger middleware
+    this.app.use(this.loggerSetup());
+  }
+
+  private loggerSetup() {
+    return expressPinoLogger({
+      logger: logger,
+      autoLogging: false,
+    });
   }
 
   // configure routes for express
   private addRoutes() {
+    // route to know the number of proxies
+    this.app.get('/ip', (request, response) => response.send(request.ip));
     this.app.use('/api/todos', todosRouter);
   }
 
@@ -47,7 +78,7 @@ export class HttpServer {
     this.app.use(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (error: Error, req: Request, res: Response, next: NextFunction) => {
-        console.log('Error (Global Error Handler)', error.stack);
+        logger.fatal(`Error (Global Error Handler) - ${error.stack}`);
         // Handle 404 not found routes
         if (error instanceof NotFoundError) {
           return res.status(error.status).json({
